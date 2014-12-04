@@ -1,0 +1,515 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//ES" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Registro de Visitantes</title>
+    <style type="text/css">
+
+        html { 
+          background: url(bg.jpg) no-repeat center center fixed; 
+          -webkit-background-size: cover;
+          -moz-background-size: cover;
+          -o-background-size: cover;
+          background-size: cover;
+        }
+
+        .tableStyle
+        {
+            background-color: #cccccc;
+        }
+        .styleTable
+        {
+            border-width: 1px 1px 1px 1px;
+            border-spacing: 0;
+            border-collapse: collapse;
+            border-style: ridge;
+            border-color: black;
+            font-family: Verdana;
+            font-size: 8pt;
+            clear: both;
+            margin: 0;
+            padding: 0;
+        }
+        .textStyle1
+        {
+            font-size: 8pt;
+            font-family: Verdana;
+            width: 240px;
+        }
+		.textStyle
+        {
+            font-size: 8pt;
+            font-family: Verdana;
+            width: 345px;
+        }
+        .textStyle2
+        {
+            font-size: 8pt;
+            font-family: Verdana;
+            width: 345px;
+            color: red;
+        }
+        .buttonStyle
+        {
+            width: 80px;
+            height: 30px;
+            font-weight: bold;
+            font-size: 8pt;
+            font-family: Verdana;
+        }
+        .trStyle
+        {
+            height: 30px;
+        }
+        .trStyleDiv
+        {
+            height: 20px;
+        }
+        .heading
+        {
+            background-color: #D7D8D2;
+            color: black;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .title
+        {
+            margin-top: 2em;
+            font-family: Verdana;
+            font-size: 22pt;
+            color: white;
+            text-shadow: 0px 2px 3px #555;
+
+        }
+        .txt_box
+        {
+            border: #666666 1px solid;
+            color: #333333;
+            font-family: Verdana;
+            font-size: 8pt;
+            height: 13pt;
+        }
+
+        header h1{height:86px; width:350px; position:absolute; top:10px; left:14px}
+        header h1 a{display:block; height:100%; background:url(logo.png) center center no-repeat; text-decoration:none}
+    </style>
+</head>
+<body> 
+
+<header>
+    <h1><a href="#"></a></h1>
+    <div class="title" align="center">Sistema de Registro de Visitas</div>
+</header>
+<br/>
+<br/>
+    <table align="center">
+        <tr>
+            <td valign="top">
+                <table id="picture" width="500px" bgcolor="#F0F1F3" class="textStyle">
+                <tr class="trStyle">
+                        <td align='center' valign="middle" colspan="2" class="heading">
+                            Fotografia
+                        </td>
+                    </tr>
+                    <td align="center" valign="middle">
+                <!-- First, include the JPEGCam JavaScript Library -->
+
+                <script type="text/javascript" src="webcam.js"></script>
+                <script type="text/javascript" src="yui/yahoo-min.js"></script>
+                <script type="text/javascript" src="yui/event-min.js"></script>
+                <script type="text/javascript" src="yui/connection-core.js"></script>
+                <script type="text/javascript" src="yui/connection-min.js"></script>
+
+                <!-- Configure a few settings -->
+                <script language="JavaScript" type="text/javascript">
+                    webcam.set_api_url('test.php');
+                    webcam.set_quality(90); // JPEG quality (1 - 100)
+                    webcam.set_shutter_sound(true); // play shutter click sound
+                </script>
+
+                <!-- Next, write the movie to the page at 320x240 -->
+                <script language="JavaScript" type="text/javascript">
+                    document.write(webcam.get_html(280, 272));
+                </script>
+
+                <!-- Some buttons for controlling things -->
+                <!-- Code to handle the server response (see test.php) -->
+
+                <script language="JavaScript" type="text/javascript">
+                    webcam.set_hook('onComplete', 'my_completion_handler');
+
+                    function isNumber(evt) {
+                        evt = (evt) ? evt : window.event;
+                        var charCode = (evt.which) ? evt.which : evt.keyCode;
+                        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                            return false;
+                        }
+                        return true;
+                    }
+
+                    function mobileNoValidate() {
+                        var mobileDom = document.getElementById('mobileno');
+                        if (mobileDom) {
+                            var x = mobileDom.value;
+                            var re10digit = /^\d{10,11}$/;
+                            if (x.search(re10digit) == -1) {
+                                alert("Telefono Invalido");
+                                return true;
+                            };
+                        };
+                        return true;
+                    }
+
+                    function emailValidate() {
+                        var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                        var emailDom = document.getElementById('email');
+                        if (emailDom) {
+                            if (emailDom.value.search(emailPattern) == -1) {
+                                alert('Email Invalido');
+                                return true;
+                            };
+                        };
+                        return true;
+                    }
+
+                    function take_snapshot() {
+					
+						if (!mobileNoValidate()) {
+							return false;
+					   };
+						if (!emailValidate()) {
+							return false;
+						};
+                        var formUI = document.getElementById('ui');
+                        if (formUI) {
+                            var url = 'test.php?dt=' + (new Date()).getTime();
+                            if (formUI.uname && formUI.uname.value) {
+                                url += '&un=' + escape(formUI.uname.value);
+                            };
+
+                            if (formUI.cedula && formUI.cedula.value) {
+                                url += '&ci=' + escape(formUI.cedula.value);
+                            };
+
+                            if (formUI.meet && formUI.meet.value) {
+                                url += '&mt=' + escape(formUI.meet.value);
+                            };
+
+                            if (formUI.from && formUI.from.value) {
+                                url += '&cpname=' + escape(formUI.from.value);
+                            };
+
+                            if (formUI.representinglist && formUI.representinglist.value) {
+                                url += '&ra=' + escape(formUI.representinglist.value);
+                            };
+
+                            if (formUI.mobileno && formUI.mobileno.value) {
+                                url += '&mn=' + escape(formUI.mobileno.value);
+                            };
+
+                            if (formUI.email && formUI.email.value) {
+                                url += '&em=' + escape(formUI.email.value);
+                            };
+                            webcam.set_api_url(url);
+                        };
+                        webcam.snap();
+                    }
+
+                    clearLogin = function() {
+                        var domLogin = document.getElementById('ui');
+                        if (domLogin) {
+                            domLogin.reset();
+                        }
+                    }
+
+                    function GetString(Str, startTagName, endTagName) {
+                        return Str.substring((Str.indexOf(startTagName) + startTagName.length), Str.indexOf(endTagName));
+                    }
+
+                    function my_completion_handler(msg) {
+                        // extract URL out of PHP output
+                        var output = msg;
+                        //console.log(output);
+						var image_url = GetString(msg, '<urlsrc>', '</urlsrc>');
+						var usrid = GetString(msg, '<id>', '</id>');
+						var fname = GetString(msg, '<fname>', '</fname>');
+                        var cedula = GetString(msg, '<cedula>', '</cedula>');
+						var tomeet = GetString(msg, '<tomeet>', '</tomeet>');
+						var comingfrom = GetString(msg, '<comingfrom>', '</comingfrom>');
+						var mobile = GetString(msg, '<mobile>', '</mobile>');
+						var email = GetString(msg, '<email>', '</email>');
+						var checkin = GetString(msg, '<checkin>', '</checkin>');
+						var status = GetString(msg,'<status>','</status>');
+
+                        webcam.reset();
+
+                        clearLogin();
+
+                        myWindow = window.open('', '', 'width=460,height=320');
+
+                       var divUpd = document.createElement('div');
+                        divUpd.id = 'upload_results';
+                        if (myWindow.document.body != null) { myWindow.document.body.appendChild(divUpd); }
+
+                        myWindow.document.body.innerHTML =
+	                    "<table width='220px' style='border-width: 1px 1px 1px 1px;border-spacing: 0;border-collapse: collapse;" +
+                        "border-style: ridge;border-color: #ff5300;font-family: Verdana;font-size: 8pt;clear: both;margin: 0;padding: 0;'>" +
+                        "<tr style='height: 20px;'>" +
+                        "<td align='center' valign='middle' style='font-weight: bold;font-size: 12px;color: #ff5300;background-color:" +
+                        "#D7D8D2;width: 300px;height:30px;font-size:15pt;font-family: Verdana;font-weight:bold;background-color: #ff5300;color:#ffffff;'>" +
+                        "Visitante</td></tr>" +
+                        "<tr><td align='center'><br /><img width='120' height='120' src='" + image_url + "'/><br /><br />" +
+                        "<table border='0' style='font-size: 8pt;font-family: Verdana;' " + 
+                        "width='220px' bgcolor='#ffffff' >" +
+                        "<tr style='height: 20px;'>" +
+                        "<td align='right' style='width: 80px;font-weight:bold;'>ID &nbsp;&nbsp;</td>" +
+                        "<td style='width: 160px;font-weight:bold;'>" + usrid + "</td></tr>" +
+                        "<tr style='height: 20px;'>" +
+                        "<td align='right' style='width: 80px;font-weight:bold;'>Nombre:&nbsp;&nbsp;</td>" +
+                        "<td style='width: 160px;font-weight:bold;'>" + fname + "</td></tr>" +
+                        "<tr style='height: 20px;'>" +
+                        "<td align='right' style='width: 80px;font-weight:bold;'>Cedula:&nbsp;&nbsp;</td>" +
+                        "<td style='width: 160px;font-weight:bold;'>" + cedula + "</td></tr>" +
+                        "<tr style='height: 20px;'>" +
+                        "<td align='right' style='width: 80px;'>Solicita a:&nbsp;&nbsp;</td>" +
+                        "<td style='width: 160px;'>" + tomeet + "</td></tr>" +
+                        "<tr style='height: 20px;'>" +
+                        "<td align='right' style='width: 80px;'>Tipo:&nbsp;&nbsp;</td>" +
+                        "<td style='width: 160px;'>" + comingfrom + "</td></tr>" +
+                        "<tr style='height: 20px;'>" +                                     
+                        "<td align='right' style='width: 80px;'>Entrada:&nbsp;&nbsp;</td>" +
+                        "<td style='width: 160px;'>" + checkin + "</td></tr></table></td></tr>" +
+                        "</table>";
+           
+						myWindow.focus();
+                        printContent = function() {
+                            myWindow.focus();
+                            myWindow.print();
+                            closeCurWindow = function() {
+                                myWindow.close();
+                            };
+                            window.setTimeout(closeCurWindow, 30000);
+                        };
+                        window.setTimeout(printContent, 3000);
+                    };
+
+
+                    clearSignoutPage = function() {
+                        var logoutDom = document.getElementById('logout');
+                        if (logoutDom) {
+                            logoutDom.reset();
+                        };
+                    };
+
+                    // ###### SignOut ###### //
+                    succSignout = function(o) {
+                        var outputDom = document.getElementById('output');
+                        if (outputDom) {
+                            if (o.responseText == 'error') {
+                                outputDom.innerHTML = 'ID de Visitante Erroneo';
+                            } else if (o.responseText == 'Invalid') {
+                                outputDom.innerHTML = 'ID de Visitante Invalido';
+                            } else {
+                                outputDom.innerHTML = 'Salida Registrada para el Visitante ' + o.responseText;
+                            }
+                        };
+                    };
+
+                    failSignout = function(o) {
+                    };
+
+                    var SignOutCallback = {
+                        success: succSignout,
+                        failure: failSignout
+                    };
+
+
+                    Signout = function() {
+                        var sUrl = "signout.php?mk=" + (new Date()).getTime();
+                        var domVid = document.getElementById('vid');
+                        if (domVid) {
+                            sUrl += '&vid=' + domVid.value;
+                        };
+                        var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, SignOutCallback);
+                    }
+                    // ###### End SignOut ###### //
+
+
+                    // ###### User Details ###### //
+                    succDetails = function(msg) {
+                        var output = msg.responseText;
+                        var exists = GetString(output, '<exists>', '</exists>');
+                        var fname = GetString(output, '<fname>', '</fname>');
+                        var from = GetString(output, '<from>', '</from>');
+                        var mobile = GetString(output, '<mobileno>', '</mobileno>');
+                        var email = GetString(output, '<email>', '</email>');
+
+                        var unameDom = document.getElementById('uname');
+                        var fromDom = document.getElementById('from');
+                        var mobilenoDom = document.getElementById('mobileno');
+                        var emailDom = document.getElementById('email');
+
+                        var outputDom = document.getElementById('output');
+                        if (outputDom) {
+                            if (exists == '1') {
+                                unameDom.value = fname;
+                                fromDom.value = from;
+                                mobilenoDom.value = mobile;
+                                emailDom.value = email;
+                                outputDom.innerHTML = 'Informacion de Usuario Encontrada';
+
+                            } else if (exists == '0') {
+                                outputDom.innerHTML = 'Usuario Nuevo. Registrar Normalmente';
+
+                            }
+                        };
+                    };
+
+                    failDetails = function(o) {
+                    };
+
+                    var UserDetailsCallback = {
+                        success: succDetails,
+                        failure: failDetails
+                    };
+
+                    UserDetails = function() {
+                        var sUrl = "userdetails.php";
+                        var cedula = document.getElementById('cedula');
+                        if (cedula) {
+                            sUrl += '?cedula=' + cedula.value;
+                        };
+                        var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, UserDetailsCallback);
+                    }
+                    // ###### End ser Details ##### //
+
+                </script>
+            </td>
+            </tr>
+            </table>
+            </td>
+            
+            <td valign="top">
+                <form id='ui'>
+                <table id='userinput' width="500px" bgcolor="#F0F1F3" class="textStyle">
+                    <tr class="trStyle">
+                        <td align='center' valign="middle" colspan="2" class="heading">
+                            Registrar Entrada
+                        </td>
+                    </tr>
+                    <tr class="trStyle">
+                        <td align='right' style='width: 200px;'>
+                            Cedula:&nbsp;&nbsp;
+                        </td>
+                        <td style='width: 300px;'>
+                            <input style='width: 200px;' id='cedula' name='cedula' type='text' class="txt_box" onkeypress="return isNumber(event)" onchange="UserDetails()"/>
+                        </td>
+                    </tr>
+                    <tr class="trStyle">
+                        <td align='right' style='width: 200px;'>
+                            Nombre:&nbsp;&nbsp;
+                        </td>
+                        <td style='width: 300px;'>
+                            <input style='width: 200px;' id='uname' name='uname' type='text' class="txt_box" />
+                        </td>
+                    </tr>
+                    <tr class="trStyle">
+                        <td align='right' style='width: 200px;'>
+                            Solicita a:&nbsp;&nbsp;
+                        </td>
+                        <td style='width: 300px;'>
+                            <input style='width: 200px;' id='meet' name='meet' type='text' class="txt_box" />
+                        </td>
+                    </tr>
+					<tr class="trStyle">
+                        <td align='right' style='width: 200px;'>
+                            Compañia:&nbsp;&nbsp;
+                        </td>
+                        <td style='width: 300px;'>
+                            <input style='width: 200px;' id='from' name='from' type='text' class="txt_box" />
+                        </td>
+                    </tr>
+                    <tr class="trStyle">
+                        <td align='right' style='width: 200px;'>
+                            Tipo de Visita:&nbsp;&nbsp;
+                        </td>
+                        <td style='width: 300px;'>
+                            <select id='representinglist' name='representinglist' style='width: 200px;'
+                                class="txt_box">
+                                <option value='Vendedor'>Vendedor</option>
+                                <option value='Amigo'>Amigo</option>
+                                <option value='Familia'>Familia</option>
+                                <option value='Entrevista'>Entrevista</option>
+                                <option value='Cliente'>Cliente</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="trStyle">
+                        <td align='right' style='width: 200px;'>
+                            Telefono:&nbsp;&nbsp;
+                        </td>
+                        <td style='width: 300px;'>
+                            <input style='width: 200px;' id='mobileno' name='mobileno' type='text' class="txt_box" />
+                        </td>
+                    </tr>
+                    <tr class="trStyle">
+                        <td align='right' style='width: 200px;'>
+                            Email:&nbsp;&nbsp;
+                        </td>
+                        <td style='width: 300px;'>
+                            <input style='width: 200px;' id='email' name='email' type='text' class="txt_box" />
+                        </td>
+                    </tr>
+                    <tr style="height: 50px;">
+                        <td align='center' style='width: 200px;'>
+                            <!-- <input type="button" value="Configure..." onclick="webcam.configure()" class="buttonStyle"
+                                style="width: 100px;" /> -->
+                        </td>
+                        <td align="left" style='width: 300px;'>
+                            <input type="button" value="Imprimir" onclick="take_snapshot()" class="buttonStyle" />&nbsp;&nbsp;
+                            <input type="button" value="Borrar" onclick="clearLogin()" class="buttonStyle" />
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </td>
+            <td valign="top">
+                <form id='logout'>
+                <table id='userlogout' width="500px" bgcolor="#F0F1F3" class="textStyle">
+                    <tr class="trStyle">
+                        <td align='center' valign="middle" colspan="2" class="heading">
+                            Registrar Salida
+                        </td>
+                    </tr>
+                    <tr class="trStyle">
+                        <td align='center' style='width: 200px;'>
+                            ID de Visitante:&nbsp;&nbsp;
+                        </td>
+                        <td style='width: 300px;'>
+                            <input style='width: 200px;' id='vid' name='vid' type='text' class="txt_box" />
+                        </td>
+                    </tr>
+                    <tr class="trStyle">
+                        <td align='center'>
+                        </td>
+                        <td align='left'>
+                            <input type='button' value='Enviar' onclick='javascript:Signout();' class="buttonStyle" />&nbsp;&nbsp;
+                            <input type='button' value='Borrar' onclick='javascript:clearSignoutPage();' class="buttonStyle" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan='2'>
+                            <div id='output' align="center" class="textStyle2">
+                            </div>
+                            <!--Enter the visitor id-->
+                        </td>
+                    </tr>
+                </table>
+
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
